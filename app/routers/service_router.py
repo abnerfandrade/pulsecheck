@@ -1,7 +1,9 @@
-from fastapi import APIRouter, Depends
+from typing import Optional
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.schemas.service import ServiceCreate, ServiceRead
 from app.models.service import Service
+from sqlalchemy.future import select
 from app.core.database import get_session
 
 router = APIRouter(prefix="/services", tags=["Services"])
@@ -20,6 +22,28 @@ async def create_service(service: ServiceCreate, session: AsyncSession = Depends
 
     return new_service
 
-@router.get("/")
-async def list_services():
-    return {"response": "teste get"}
+@router.get("/", response_model=list[ServiceRead])
+async def list_services(
+    name: Optional[str] = Query(None, description="Filtra pelo nome do serviço"),
+    url: Optional[str] = Query(None, description="Filtra pela URL do serviço"),
+    session: AsyncSession = Depends(get_session)
+):
+    query = select(Service)
+
+    if name:
+        query = query.where(Service.name.ilike(f"%{name}%"))
+
+    if url:
+        query = query.where(Service.url.ilike(f"%{url}%"))
+
+    result = await session.execute(query)
+    services = result.scalars().all()
+
+    return services
+
+@router.get("/{id_service}", response_model=ServiceRead)
+async def read_service(id_service: int, session: AsyncSession = Depends(get_session)):
+    result = await session.execute(select(Service).where(Service.id == id_service))
+    services = result.scalars().first()
+
+    return services
