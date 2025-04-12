@@ -1,0 +1,55 @@
+version: "3.9"
+
+services:
+  app:
+    build: .
+    container_name: pulsecheck_api
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - mongo
+      - rabbitmq
+    volumes:
+      - .:/app
+    command: >
+      fastapi dev app/main.py --host 0.0.0.0 --port 8000
+
+  postgres:
+    image: postgres:16
+    container_name: pulsecheck_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: pulseuser
+      POSTGRES_PASSWORD: pulsepass
+      POSTGRES_DB: pulsecheckdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  mongo:
+    image: mongo:7
+    container_name: pulsecheck_mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: pulsecheck_rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672" # UI web no localhost:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+volumes:
+  postgres_data:
+  mongo_data:
