@@ -33,6 +33,19 @@ services:
       - pulsecheck_net
     command: /app/wait-for-it.sh rabbitmq 5672 -- python -m app.workers.worker
 
+  dispatcher:
+    build: .
+    container_name: pulsecheck_dispatcher
+    env_file:
+      - .env
+    depends_on:
+      - rabbitmq
+    volumes:
+      - .:/app
+    networks:
+      - pulsecheck_net
+    command: /app/wait-for-it.sh rabbitmq 5672 -- python -m app.workers.dispatcher
+
   postgres:
     image: postgres:16
     container_name: pulsecheck_postgres

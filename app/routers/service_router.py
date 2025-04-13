@@ -1,9 +1,9 @@
 from typing import Optional
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
 from app.schemas.service import ServiceCreate, ServiceRead
 from app.models.service import Service
-from sqlalchemy.future import select
 from app.core.database import get_session
 
 router = APIRouter(prefix="/services", tags=["Services"])
