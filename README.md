@@ -1,13 +1,10 @@
-## 📄 `README.md`
-
-````markdown
 # 🚀 PulseCheck API
 
-Plataforma de Monitoramento de Serviços Internos desenvolvida com **Python**, **FastAPI**, **PostgreSQL**, **MongoDB**, **RabbitMQ** e **Docker**.
+Internal Services Monitoring Platform built with **Python**, **FastAPI**, **PostgreSQL**, **MongoDB**, **RabbitMQ**, and **Docker**.
 
 ---
 
-## 📦 Stack
+## 📦 Tech Stack
 
 - **Python 3.12**
 - **FastAPI**
@@ -20,40 +17,41 @@ Plataforma de Monitoramento de Serviços Internos desenvolvida com **Python**, *
 
 ---
 
-## 📖 Como rodar o projeto
+## 📖 How to Run the Project
 
-### 🔧 Pré-requisitos
+### 🔧 Requirements
 
 - Docker
 - Docker Compose
 
 ---
 
-### 📦 Subir os containers
+### 📦 Start the Containers
 
 ```bash
 docker-compose up -d
 ```
-````
 
-Isso irá subir:
+This will start:
 
-- API FastAPI (porta `8000`)
-- PostgreSQL (porta `5432`)
-- MongoDB (porta `27017`)
-- RabbitMQ + UI (portas `5672` e `15672`)
+- FastAPI API (port `8000`)
+- PostgreSQL (port `5432`)
+- MongoDB (port `27017`)
+- RabbitMQ + Management UI (ports `5672` and `15672`)
+- Health Check Worker
+- Dispatcher Worker
 
 ---
 
-### 🗄️ Rodar as migrations
+### 🗄️ Run Database Migrations
 
-#### 📌 Criar nova migration (opcional)
+#### 📌 Create a New Migration (optional)
 
 ```bash
-docker exec pulsecheck_api alembic revision --autogenerate -m "descrição da migration"
+docker exec pulsecheck_api alembic revision --autogenerate -m "migration description"
 ```
 
-#### 📌 Aplicar migrations
+#### 📌 Apply Migrations
 
 ```bash
 docker exec pulsecheck_api alembic upgrade head
@@ -61,25 +59,32 @@ docker exec pulsecheck_api alembic upgrade head
 
 ---
 
-### 🚀 Acessar a API
+## 🚀 Access the API
 
-Acesse: [http://localhost:8000/docs](http://localhost:8000/docs)
+Visit: [http://localhost:8000/docs](http://localhost:8000/docs)
 
-Para a documentação interativa via Swagger.
-
----
-
-## 🐰 Acessar RabbitMQ Management
-
-Acesse: [http://localhost:15672](http://localhost:15672)  
-Login: `guest`
-Senha: `guest`
+To view the interactive Swagger documentation.
 
 ---
 
-## 📝 Variáveis de Ambiente
+## 🐰 Access RabbitMQ Management UI
 
-Exemplo do arquivo `.env`:
+Visit: [http://localhost:15672](http://localhost:15672)  
+Login: `guest`  
+Password: `guest`
+
+---
+
+## 📖 Available Workers
+
+- **Health Check Worker**: Listens to the `health_checks` queue and performs HTTP health checks for services.
+- **Dispatcher Worker**: Periodically queries services from PostgreSQL and dispatches health check tasks to the queue based on each service’s configured frequency.
+
+---
+
+## 📝 Environment Variables
+
+Example `.env` file:
 
 ```env
 DATABASE_URL=postgresql+asyncpg://username:password@host:port/database
@@ -87,19 +92,20 @@ MONGO_URL=mongodb://host:port
 RABBITMQ_URL=amqp://username:password@host:port/
 PROJECT_NAME=PulseCheck
 API_PREFIX=/api
+QUEUE_HEALTH_CHECK=health_checks
 ```
 
 ---
 
-## 📌 Comandos úteis
+## 📌 Useful Commands
 
-### 📄 Ver logs da aplicação
+### 📄 View Application Logs
 
 ```bash
-docker-compose logs -f app
+docker-compose logs -f api
 ```
 
-### 📦 Parar os containers
+### 📦 Stop Containers
 
 ```bash
 docker-compose down
@@ -107,10 +113,6 @@ docker-compose down
 
 ---
 
-## ✨ Autor
+## ✨ Author
 
-Feito por [Abner Ferreira de Andrade](https://github.com/abnerfandrade) 🚀
-
-```
-
-```
+Made with 💙 by [Abner Ferreira de Andrade](https://github.com/abnerfandrade) 🚀
