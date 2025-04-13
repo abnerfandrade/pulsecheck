@@ -115,4 +115,4 @@ docker-compose down
 
 ## ✨ Author
 
-Made with 💙 by [Abner Ferreira de Andrade](https://github.com/abnerfandrade) 🚀
+Made by [Abner Ferreira de Andrade](https://github.com/abnerfandrade) 🚀
