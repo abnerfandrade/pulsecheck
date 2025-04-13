@@ -41,9 +41,9 @@ async def list_services(
 
     return services
 
-@router.get("/{id_service}", response_model=ServiceRead)
-async def read_service(id_service: int, session: AsyncSession = Depends(get_session)):
-    result = await session.execute(select(Service).where(Service.id == id_service))
+@router.get("/{service_id}", response_model=ServiceRead)
+async def read_service(service_id: int, session: AsyncSession = Depends(get_session)):
+    result = await session.execute(select(Service).where(Service.id == service_id))
     service = result.scalars().first()
 
     return service
