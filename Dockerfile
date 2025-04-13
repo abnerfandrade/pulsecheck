@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     libpq-dev \
     gcc \
+    netcat-traditional \
     && rm -rf /var/lib/apt/lists/*
 
 # Define diretório de trabalho
@@ -22,6 +23,9 @@ RUN pip install -r requirements.txt
 
 # Copia o código para dentro do container
 COPY . .
+
+# Da permissão de execução para o script wait-for-it.sh
+RUN chmod +x /app/wait-for-it.sh
 
 # Expõe a porta padrão do FastAPI/Uvicorn
 EXPOSE 8000

@@ -14,8 +14,24 @@ services:
       - rabbitmq
     volumes:
       - .:/app
+    networks:
+      - pulsecheck_net
     command: >
       uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  worker:
+    build: .
+    container_name: pulsecheck_worker
+    env_file:
+      - .env
+    depends_on:
+      - rabbitmq
+      - mongo
+    volumes:
+      - .:/app
+    networks:
+      - pulsecheck_net
+    command: /app/wait-for-it.sh rabbitmq 5672 -- python -m app.workers.worker
 
   postgres:
     image: postgres:16
@@ -29,6 +45,8 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - pulsecheck_net
 
   mongo:
     image: mongo:7
@@ -38,6 +56,8 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+    networks:
+      - pulsecheck_net
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -49,7 +69,13 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - pulsecheck_net
 
 volumes:
   postgres_data:
   mongo_data:
+
+networks:
+  pulsecheck_net:
+    driver: bridge

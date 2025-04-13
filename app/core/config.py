@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     RABBITMQ_URL: str
     PROJECT_NAME: str = "PulseCheck"
     API_PREFIX: str = "/api"
+    QUEUE_HEALTH_CHECK: str
 
     model_config = SettingsConfigDict(
         env_file=".env",
