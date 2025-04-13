@@ -99,10 +99,22 @@ QUEUE_HEALTH_CHECK=health_checks
 
 ## 📌 Useful Commands
 
-### 📄 View Application Logs
+### 📄 View API Logs
 
 ```bash
 docker-compose logs -f api
+```
+
+### 📄 View Health Check Worker Logs
+
+```bash
+docker-compose logs -f worker
+```
+
+### 📄 View Dispatcher Worker Logs
+
+```bash
+docker-compose logs -f dispatcher
 ```
 
 ### 📦 Stop Containers
