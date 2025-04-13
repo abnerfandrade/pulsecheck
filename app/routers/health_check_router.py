@@ -7,8 +7,8 @@ router = APIRouter(prefix="/health_check", tags=["HealthCheck"])
 
 @router.get("/", response_model=HealthCheckRead)
 async def check_status(
-    url: str = Query(description="URL do serviço/site a ser verificado. " \
-                                 "Deve informar o protocolo http no início, ex: https://")
+    url: str = Query(description="URL of the service/site to be checked. " \
+                                 "The protocol must be included at the beginning, e.g., https://")
 ):
     response = await check_service(url)
 

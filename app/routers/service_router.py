@@ -24,8 +24,8 @@ async def create_service(service: ServiceCreate, session: AsyncSession = Depends
 
 @router.get("/", response_model=list[ServiceRead])
 async def list_services(
-    name: Optional[str] = Query(None, description="Filtra pelo nome do serviço"),
-    url: Optional[str] = Query(None, description="Filtra pela URL do serviço"),
+    name: Optional[str] = Query(None, description="Filter by service name"),
+    url: Optional[str] = Query(None, description="Filter by service URL"),
     session: AsyncSession = Depends(get_session)
 ):
     query = select(Service)
