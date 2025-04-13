@@ -13,12 +13,3 @@ class Service(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=datetime.now(timezone.utc)
     )
-
-    def __repr__(self) -> str:
-        return f"Service(" \
-            f"id={self.id!r}," \
-            f"name={self.name!r}," \
-            f"url={self.url!r}," \
-            f"frequency={self.frequency!r}," \
-            f"created_at={self.created_at!r}" \
-        ")"
