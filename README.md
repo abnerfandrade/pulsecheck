@@ -82,14 +82,14 @@ Password: `guest`
 
 ---
 
-## 📝 Environment Variables
+## 📝 Environment Variables to use local with docker
 
 Example `.env` file:
 
 ```env
-DATABASE_URL=postgresql+asyncpg://username:password@host:port/database
-MONGO_URL=mongodb://host:port
-RABBITMQ_URL=amqp://username:password@host:port/
+DATABASE_URL=postgresql+asyncpg://pulseuser:pulsepass@postgres:5432/pulsecheckdb
+MONGO_URL=mongodb://mongo:27017
+RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672/
 PROJECT_NAME=PulseCheck
 API_PREFIX=/api
 QUEUE_HEALTH_CHECK=health_checks
