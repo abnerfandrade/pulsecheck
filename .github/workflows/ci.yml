@@ -54,3 +54,11 @@ jobs:
       - name: Run lint (flake8)
         run: |
           flake8 app tests
+
+      - name: Run tests
+        env:
+          DATABASE_URL: postgresql+asyncpg://test:test@localhost:5432/test_db
+          MONGO_URL: mongodb://localhost:27017
+          RABBITMQ_URL: amqp://guest:guest@localhost:5672/
+        run: |
+          pytest --disable-warnings --maxfail=1
