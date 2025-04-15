@@ -8,8 +8,12 @@ from app.core.database import get_session
 
 router = APIRouter(prefix="/services", tags=["Services"])
 
+
 @router.post("/", response_model=ServiceRead)
-async def create_service(service: ServiceCreate, session: AsyncSession = Depends(get_session)):
+async def create_service(
+    service: ServiceCreate,
+    session: AsyncSession = Depends(get_session)
+):
     new_service = Service(
         name=service.name,
         url=service.url,
@@ -21,6 +25,7 @@ async def create_service(service: ServiceCreate, session: AsyncSession = Depends
     await session.refresh(new_service)
 
     return new_service
+
 
 @router.get("/", response_model=list[ServiceRead])
 async def list_services(
@@ -41,9 +46,15 @@ async def list_services(
 
     return services
 
+
 @router.get("/{service_id}", response_model=ServiceRead)
-async def read_service(service_id: int, session: AsyncSession = Depends(get_session)):
-    result = await session.execute(select(Service).where(Service.id == service_id))
+async def read_service(
+    service_id: int,
+    session: AsyncSession = Depends(get_session)
+):
+    result = await session.execute(
+        select(Service).where(Service.id == service_id)
+    )
     service = result.scalars().first()
 
     return service

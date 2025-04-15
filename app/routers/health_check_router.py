@@ -4,7 +4,9 @@ from fastapi import APIRouter, Query, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from app.services.health_check import check_service
-from app.schemas.health_check import HealthCheckRead, ListCheckLogs, SuccessStatus
+from app.schemas.health_check import (
+    HealthCheckRead, ListCheckLogs, SuccessStatus
+)
 from app.core.database import get_session
 from app.models.service import Service
 from app.services.mongo_client import logs_collection
@@ -19,17 +21,21 @@ router = APIRouter(prefix="/health_check", tags=["HealthCheck"])
 )
 async def check_status(
     service_id: Optional[int] = Query(
-        None, description="Execute the check on an existing registered service " \
-                          "by filtering with the service ID"
+        None,
+        description="Execute the check on an existing registered service "
+                    "by filtering with the service ID"
     ),
     url: Optional[str] = Query(
-        None, description="URL of the service/site to be checked. " \
-                          "The protocol must be included at the beginning, e.g., https://"
+        None,
+        description="URL of the service/site to be checked. The protocol "
+                    "must be included at the beginning, e.g., https://"
     ),
     session: AsyncSession = Depends(get_session)
 ):
     if service_id:
-        result = await session.execute(select(Service).where(Service.id == service_id))
+        result = await session.execute(
+            select(Service).where(Service.id == service_id)
+        )
         service = result.scalars().first()
         url = service.url
 
@@ -44,9 +50,15 @@ async def check_status(
     response_model=list[ListCheckLogs]
 )
 async def list_check_logs(
-    service_id: Optional[int] = Query(None, description="Filter logs by service ID"),
-    url: Optional[str] = Query(None, description="Filter logs by URL"),
-    success: SuccessStatus = Query(None, description="Filter logs by success status")
+    service_id: Optional[int] = Query(
+        None, description="Filter logs by service ID"
+    ),
+    url: Optional[str] = Query(
+        None, description="Filter logs by URL"
+    ),
+    success: SuccessStatus = Query(
+        None, description="Filter logs by success status"
+    )
 ):
     query = {}
 

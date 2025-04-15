@@ -3,6 +3,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy import DateTime
 from app.models.base import Base
 
+
 class Service(Base):
     __tablename__ = "services"
 
